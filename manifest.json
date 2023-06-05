@@ -1,28 +1,16 @@
 {
-  "action": {
-     "default_popup": "popup.html",
-     "default_title": "jwt test"
-  },
-  "commands" : {
-    "reload_extension" : {
-    "suggested_key" : {
-    "default" : "Ctrl+Shift+Q",
-    "windows" : "Ctrl+Shift+Q",
-    "mac" : "MacCtrl+Shift+Q",
-    "chromeos" : "Ctrl+Shift+Q",
-    "linux" : "Ctrl+Shift+Q"
-    },
-    "description" : "shortcut for reloading extensions"
-    }
-  },
-  "background" : {
-    "service_worker" : "background.js"
-  },
-  "description": "Get jwt token.",
   "manifest_version": 3,
   "name": "jwt test",
+  "description": "Get jwt token.",
   "permissions": [ "scripting", "activeTab", "storage", "tabs" ],
-  "version": "0.1.0"
+  "version": "0.1.0",
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "jwt test"
+  },
+ "background" : {
+   "service_worker" : "background.js"
+  }
 }
 
 
