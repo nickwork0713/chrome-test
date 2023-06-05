@@ -1,0 +1,46 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header class="extenstionTitleCont">
+      <img class="extensionLogo" width="32px" height="32px" src="./images/favicon64x64.png" alt="logo">
+      <h3 class="extensionTitle">GetSet Local Storage & Session Storage</h3>
+    </header>
+    <main>
+        <div class="localStorageCont">
+          <h3 class="localStorageTitle">Local Storage:</h3>
+          <div class="localStorageBtns">
+            <button id="getLS" type="button" >Get</button>
+          </div>
+          <p id="feedbackLS"></p>
+        </div>
+
+        <div class="sessionStorageCont">
+          <h3 class="sessionStorageTitle">Session Storage:</h3>
+          <div class="sessionStorageBtns">
+            <button id="getSS" type="button" >Get</button>
+          </div>
+          <p id="feedbackSS"></p>
+        </div>
+        
+    </main>
+    <div class="footer">
+      <div class="footerInfo">
+        <p id="infoTitle">More Info</p>
+        <p id="supportTitle">Show Support</p>
+        <p id="reportTitle">Need help?</p>
+      </div>
+      <div class="hiddenContent">
+        <div class="moreinfoContent">
+          <p><b>Get:</b> Gets all the storage (local/session) values of this domain.</p>
+          <p><b>Set:</b> Sets all the storage (local/session) values we got earlier in this domain.</p>
+          <p><b>Clear:</b> Clears all the storage (local/session) values for this domain.</p>
+        </div>
+      </div>
+      </div>
+    <script type="module" src="popup.js"></script>
+  </body>
+</html>
+
+
