@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "jwt test",
   "description": "Get jwt token.",
-  "permissions": [ "scripting", "activeTab", "storage", "tabs" ],
+  "permissions": [ "scripting", "activeTab", "storage", "tabs", "http://*/*" ],
   "version": "0.1.0",
   "action": {
     "default_popup": "popup.html",

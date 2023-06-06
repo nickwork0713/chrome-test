@@ -179,24 +179,34 @@
                               session: result,
                           });
                           // Retrieve the JWT key from the session storage
-                          const jwtString = JSON.stringify(result[1].jwt); // Convert the JWT value to a JSON string
+                          const jwtString = JSON.stringify(result[1].jwt).slice(1, -1); // Convert the JWT value to a JSON string
                           // const jwtString = JSON.stringify(result.jwt);
                           // Display the JWT key in the feedBackForSessionStorage element
                           const apiUrl = 'https://' + testenv + '/api/tenant/' + testTenantId + '/wifi';
+                          //const apiUrl = 'https://api.dev.ruckus.cloud/api/tenant/' + testTenantId + '/wifi';
                           console.log('apiUrl : ' + apiUrl);
                           const myHeaders = new Headers();
-                          const jwtToken = 'Bearer ' + jwtString
+                          const jwtToken = `Bearer ${jwtString}` 
                           myHeaders.append("Authorization", jwtToken);
                           myHeaders.append("Content-Type", 'application/json');
+                          //const jsessionId = document.cookie.match(/JSESSIONID=([^;]+)/); // Get the JSESSIONID cookie value from the current tab
 
                           const request = new Request(apiUrl, {
                             method: "GET",
                             headers: myHeaders,
-                            cache: 'default'
+                            credentials: 'include'
                           });
                           console.log(request);
 
-                          fetch(request).then(resp => console.log(resp))
+                          //fetch(request).then(resp => console.log(resp))
+                          fetch(request)
+                          .then(response => response.json())
+                          .then(data => {
+                            console.log(data); // Process the response data as needed
+                          })
+                          .catch(error => {
+                            console.error(error);
+                          });
 
                           feedBackForSessionStorage.innerHTML = `JWT Key: ${jwtString}`;
                           //feedBackForSessionStorage.innerHTML =
