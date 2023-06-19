@@ -112,10 +112,10 @@
           const tabUrlParts = tabUrlAll.replace(/^(https?:\/\/)?/, "").split("/");
           const testenv = tabUrlParts[0]
           var venueGroups=[]; 
-          var testTenantId = tabUrlParts[4] // Pver R1
+          var testTenantId = tabUrlParts[1] // Pver R1
           if (testTenantId === 'api') {
             //The UI is in pver ACX.
-            testTenantId = tabUrlParts[1] // Pver ACX
+            testTenantId = tabUrlParts[4] // Pver ACX
           }
           console.log('tenant id: ' + testTenantId);
           const tabId = activeTab?.id
