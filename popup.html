@@ -5,37 +5,34 @@
   <body>
     <header class="extenstionTitleCont">
       <!--<img class="extensionLogo" width="32px" height="32px" src="./images/favicon64x64.png" alt="logo"> -->
-      <h3 class="extensionTitle">GetSet Local Storage & Session Storage</h3>
+      <h3 class="extensionTitle">Ruckus Cloud Chrome Tool</h3>
     </header>
     <main>
-        <div class="localStorageCont">
-          <h3 class="localStorageTitle">Local Storage:</h3>
-          <div class="localStorageBtns">
-            <button id="getLS" type="button" >Get</button>
-          </div>
-          <p id="feedbackLS"></p>
-        </div>
-
-        <div class="sessionStorageCont">
-          <h3 class="sessionStorageTitle">Session Storage:</h3>
-          <div class="sessionStorageBtns">
-            <button id="getSS" type="button" >Get</button>
+          <div id="buttonContainer">
+            <button id="getAPpass" type="button" >Get AP Password</button>
           </div>
           <p id="feedbackSS"></p>
+          <div id="groupContainer"></div>
+          <table id="groupTable">
+            <thead>
+              <tr id="headerRow">
+                <!-- Table headers will be dynamically generated here -->
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Table rows will be dynamically generated here -->
+            </tbody>
+          </table>
         </div>
         
     </main>
     <div class="footer">
       <div class="footerInfo">
         <p id="infoTitle">More Info</p>
-        <p id="supportTitle">Show Support</p>
-        <p id="reportTitle">Need help?</p>
       </div>
       <div class="hiddenContent">
         <div class="moreinfoContent">
-          <p><b>Get:</b> Gets all the storage (local/session) values of this domain.</p>
-          <p><b>Set:</b> Sets all the storage (local/session) values we got earlier in this domain.</p>
-          <p><b>Clear:</b> Clears all the storage (local/session) values for this domain.</p>
+          <p><b>Get AP Password:</b> Click it to get ap password in all venues.</p>
         </div>
       </div>
       </div>

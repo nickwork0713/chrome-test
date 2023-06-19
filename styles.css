@@ -3,7 +3,7 @@
 }
 
 body {
-    width: 600px;
+    width: 800px;
     margin: 0;
     overflow-y: auto;
 }
@@ -19,7 +19,7 @@ body {
 }
 
 button {
-    width: 70px;
+    width: 150px;
     height: 30px;
     border-radius: 4px;
 }
@@ -28,24 +28,17 @@ button:hover {
     cursor: pointer;
 }
 
-.localStorageCont, .sessionStorageCont {
-    padding: 4px;
-}
-
-.localStorageBtns, .sessionStorageBtns {
+#buttonContainer {
     display: flex;
-    justify-content: space-around;
+    justify-content: flex-start; 
+    align-items: center;
+    /*height: 15vh; /* Adjust the height as needed */
 }
 
-#getLS:hover, #setLS:hover, #getSS:hover, #setSS:hover {
+#getAPpass:hover, {
     background-color: yellow;
     font-weight: bold;
     border-bottom: 3px solid black;
-}
-
-#clearLS:hover, #clearSS:hover {
-    background-color: red;
-    font-weight: bold;
 }
 
 #feedbackLS, #feedbackSS {
@@ -59,19 +52,12 @@ button:hover {
     font-weight: bold;
 }
 
-.moreinfoContent, .supportContent, .reportContent {
+.moreinfoContent {
     display: none;
     justify-content: center;
     flex-direction: column;
     align-items: center;
     padding: 2px 8px;
-}
-
-.supportContent > div,  .reportContent > div {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 30px;
 }
 
 a {
@@ -91,4 +77,29 @@ a:hover {
     align-items: center;
 }
 
+.table-container {
+    display: grid;
+    place-items: center;
+  }
+  
+  #groupTable {
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  #groupTable thead th {
+    padding: 8px;
+    background-color: #f2f2f2;
+    text-align: left;
+    font-weight: bold;
+  }
+  
+  #groupTable tbody td {
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  #groupTable tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
 
