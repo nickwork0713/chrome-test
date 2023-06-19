@@ -10,7 +10,7 @@ body {
 
 .extenstionTitleCont {
     width: 100%;
-    background-color: yellow;
+    background-color: lightskyblue;
     color: black;
     padding: 2px 4px;
     display: flex;
@@ -30,6 +30,10 @@ button:hover {
 
 #buttonContainer {
     display: flex;
+    height: 30px;
+    padding: 15px;
+    background-color: #61a0f8;
+    flex-direction: row;
     justify-content: flex-start; 
     align-items: center;
     /*height: 15vh; /* Adjust the height as needed */
@@ -42,7 +46,7 @@ button:hover {
 }
 
 #feedbackLS, #feedbackSS {
-    background-color: yellow;
+    background-color: lightskyblue;
     text-align: center;
 }
 
@@ -71,7 +75,7 @@ a:hover {
 .footerInfo {
     height: 30px;
     padding: 4px;
-    background-color: yellow;
+    background-color: lightskyblue;
     display: flex;
     justify-content: space-around;
     align-items: center;

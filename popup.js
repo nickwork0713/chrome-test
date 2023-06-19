@@ -69,7 +69,7 @@
 
       function changeFooterTabStyles(target) {
           let infoTitle = document.querySelector('#infoTitle')
-          const allTabs = [infoTitle, supportTitle, reportTitle]
+          const allTabs = [infoTitle]
           allTabs.forEach((tab) => {
               if (tab?.id === target) {
                   tab.style.borderBottom = '3px solid black'
@@ -85,8 +85,6 @@
           let moreinfoContent = document.querySelector('.moreinfoContent')
           const allTabsContent = [
               moreinfoContent,
-              supportContent,
-              reportContent,
           ]
           allTabsContent.forEach((tab) => {
               console.log(tab.className, 'className')
@@ -340,12 +338,6 @@
           if (event?.target?.id === 'infoTitle') {
               changeFooterTabStyles(event?.target?.id)
               showHideFooterTabs('moreinfoContent')
-          } else if (event?.target?.id === 'supportTitle') {
-              changeFooterTabStyles(event?.target?.id)
-              showHideFooterTabs('supportContent')
-          } else if (event?.target?.id === 'reportTitle') {
-              changeFooterTabStyles(event?.target?.id)
-              showHideFooterTabs('reportContent')
           }
       })
 
