@@ -5,39 +5,44 @@
   </head>
   <body>
     <header class="extenstionTitleCont">
-      <img class="extensionLogo" width="96px" height="96px" src="./images/ruckus-r1_96.png" alt="logo">
+      <img class="extensionLogo" width="48px" height="48px" src="./images/ruckus-r1_48.png" alt="logo">
       <h2 class="extensionTitle">Ruckus Cloud Chrome Tool</h2>
     </header>
     <main>
-          <div id="buttonContainer">
-            <div>  </div>
-            <button id="getAPpass" type="button" >Get AP Password</button>
-          </div>
-          <p id="feedbackSS"></p>
-          <div id="groupContainer"></div>
-          <table id="groupTable">
-            <thead>
-              <tr id="headerRow">
-                <!-- Table headers will be dynamically generated here -->
-              </tr>
-            </thead>
-            <tbody>
-              <!-- Table rows will be dynamically generated here -->
-            </tbody>
-          </table>
+      <div class="menu">
+       <div class="tab" id="tab1">Get Info</div>
+       <div class="tab" id="tab2">Add Venue</div>
+      </div>
+      <div class="content" id="tab1-content">
+        <h2>To get info from this tenant</h2>
+        <div id="buttonContainer">
+          <div>  </div>
+          <button id="getAPpass" type="button" >Get AP Password</button>
         </div>
+        <p></p>
+        <div id="groupContainer"></div>
+        <table id="groupTable">
+          <thead>
+            <tr id="headerRow">
+              <!-- Table headers will be dynamically generated here -->
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Table rows will be dynamically generated here -->
+          </tbody>
+        </table>
+      </div>
+      <div class="content" id="tab2-content">
+        <h2>To add a venue</h2>
+        <div id="buttonContainer">
+          <div>  </div>
+          <button id="addVenue" type="button" >Add Venue</button>
+        </div>
+        <p></p>
+      </div>
+    
         
     </main>
-    <div class="footer">
-      <div class="footerInfo">
-        <p id="infoTitle">More Info</p>
-      </div>
-      <div class="hiddenContent">
-        <div class="moreinfoContent">
-          <p><b>Get AP Password:</b> Click it to get AP password in all venues.</p>
-        </div>
-      </div>
-    </div>
   </body>
 </html>
 

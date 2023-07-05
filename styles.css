@@ -3,14 +3,15 @@
 }
 
 body {
-    width: 800px;
+    width: 780px;
     margin: 0;
+    overflow-x: auto;
     overflow-y: auto;
 }
 
 .extenstionTitleCont {
     width: 100%;
-    background-color: lightskyblue;
+    background-color: white;
     color: black;
     padding: 2px 4px;
     display: flex;
@@ -18,10 +19,37 @@ body {
     align-items: center;
 }
 
+.menu {
+   background-color: gray;
+   width: 100%;
+}
+
+.tab {
+    width: 200px;
+    height: 40px;
+    display: inline-block;
+    font-size: 16px;
+    padding: 12px;
+    font-weight: bold;
+    background-color: white;
+    cursor: pointer;
+}
+
+.active {
+    background-color: orange;
+}
+
+.content {
+    margin-top: 10px;
+}
+
+
 button {
     width: 150px;
     height: 30px;
     border-radius: 4px;
+    color: white;
+    background-color: gray;
 }
 
 button:hover {
@@ -32,17 +60,11 @@ button:hover {
     display: flex;
     height: 30px;
     padding: 15px;
-    background-color: #61a0f8;
+    background-color: orange;
     flex-direction: row;
     justify-content: flex-start; 
     align-items: center;
     /*height: 15vh; /* Adjust the height as needed */
-}
-
-#getAPpass:hover, {
-    background-color: yellow;
-    font-weight: bold;
-    border-bottom: 3px solid black;
 }
 
 #feedbackLS, #feedbackSS {
@@ -72,15 +94,6 @@ a:hover {
     font-weight: bold;
 }
 
-.footerInfo {
-    height: 30px;
-    padding: 4px;
-    background-color: lightskyblue;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-}
-
 .table-container {
     display: grid;
     place-items: center;
@@ -106,4 +119,6 @@ a:hover {
   #groupTable tbody tr:nth-child(even) {
     background-color: #f2f2f2;
   }
+
+  
 
