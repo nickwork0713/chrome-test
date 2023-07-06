@@ -12,6 +12,7 @@
       <div class="menu">
        <div class="tab" id="tab1">Get Info</div>
        <div class="tab" id="tab2">Add Venue</div>
+       <div class="tab" id="tab3">Query Tool</div>
       </div>
       <div class="content" id="tab1-content">
         <h2>To get info from this tenant</h2>
@@ -39,8 +40,25 @@
           <button id="addVenue" type="button" >Add Venue</button>
         </div>
         <p></p>
+        <label for="addVenueName">Venue Name:</label>
+        <input type="text" id="addVenueName" value="Venue01-TW">
+        <p></p>
+        <p id="addVenueResult"></p>
+        <p id="addVenueRequestId"></p>
       </div>
-    
+      <div class="content" id="tab3-content">
+        <h2>Query tools</h2>
+        <div id="buttonContainer">
+          <div>  </div>
+          <button id="queryApDrs" type="button" >Query AP</button>
+        </div>
+        <p></p>
+        <label for="AP Serial Number">Venue Name:</label>
+        <input type="text" id="queryAPserial" value="">
+        <p></p>
+        <p id="QueryApEnv"></p>
+        <p id="QueryApTenant"></p>
+      </div>
         
     </main>
   </body>

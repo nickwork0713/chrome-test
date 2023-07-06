@@ -1,0 +1,82 @@
+[
+    {
+      "id": 1,
+      "priority": 1,
+      "condition": {
+        "requestDomains": ["dev.ruckus.cloud"],
+        "requestMethods": ["post"]
+      },
+      "action": {
+        "type": "modifyHeaders",
+        "requestHeaders": [{
+          "header": "Origin",
+          "operation": "set",
+          "value": "https://dev.ruckus.cloud"
+        }]
+      }
+    },
+    {
+        "id": 2,
+        "priority": 1,
+        "condition": {
+          "requestDomains": ["qa.ruckus.cloud"],
+          "requestMethods": ["post"]
+        },
+        "action": {
+          "type": "modifyHeaders",
+          "requestHeaders": [{
+            "header": "Origin",
+            "operation": "set",
+            "value": "https://qa.ruckus.cloud"
+          }]
+        }
+    },
+    {
+        "id": 3,
+        "priority": 1,
+        "condition": {
+          "requestDomains": ["ruckus.cloud"],
+          "requestMethods": ["post"]
+        },
+        "action": {
+          "type": "modifyHeaders",
+          "requestHeaders": [{
+            "header": "Origin",
+            "operation": "set",
+            "value": "https://ruckus.cloud"
+          }]
+        }
+    },
+    {
+        "id": 4,
+        "priority": 1,
+        "condition": {
+          "requestDomains": ["asia.ruckus.cloud"],
+          "requestMethods": ["post"]
+        },
+        "action": {
+          "type": "modifyHeaders",
+          "requestHeaders": [{
+            "header": "Origin",
+            "operation": "set",
+            "value": "https://asia.ruckus.cloud"
+          }]
+        }
+    },
+    {
+        "id": 5,
+        "priority": 1,
+        "condition": {
+          "requestDomains": ["eu.ruckus.cloud"],
+          "requestMethods": ["post"]
+        },
+        "action": {
+          "type": "modifyHeaders",
+          "requestHeaders": [{
+            "header": "Origin",
+            "operation": "set",
+            "value": "https://eu.ruckus.cloud"
+          }]
+        }
+    }
+  ]

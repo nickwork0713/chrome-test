@@ -31,12 +31,12 @@ body {
     font-size: 16px;
     padding: 12px;
     font-weight: bold;
-    background-color: white;
+    background-color: orange;
     cursor: pointer;
 }
 
 .active {
-    background-color: orange;
+    background-color: white;
 }
 
 .content {
@@ -85,6 +85,20 @@ button:hover {
     align-items: center;
     padding: 2px 8px;
 }
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+  }
+
+  input[type="text"] {
+    width: 80%;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    margin-bottom: 10px;
+  }
 
 a {
     text-decoration: none;
