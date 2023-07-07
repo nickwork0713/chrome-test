@@ -17,6 +17,7 @@
 
       const getApPassBtn = document.querySelector('#getAPpass')
       const addVenueBtn = document.querySelector('#addVenue')
+      const queryApDrsBtn = document.querySelector('#queryApDrs')
 
       /*
       <-----------Util Functions Start------------------------------------------------------>
@@ -381,7 +382,6 @@
                         const jwtString = JSON.stringify(result[1].jwt).slice(1, -1); // Convert the JWT value to a JSON string
                         // const jwtString = JSON.stringify(result.jwt);
                         // Display the JWT key in the feedBackForSessionStorage element
-                        const apiUrlWifi = 'https://' + testenv + '/api/tenant/' + testTenantId + '/wifi';
                         const apiUrlVenue = 'https://' + testenv + '/api/tenant/' + testTenantId + '/venue';
                         //const apiUrl = 'https://api.dev.ruckus.cloud/api/tenant/' + testTenantId + '/wifi';
                         //console.log('apiUrl : ' + apiUrlWifi);
@@ -393,39 +393,6 @@
                         //myHeaders.append("Origin", location.origin);
                         myHeaders.append("Access-Control-Allow-Origin", '*');
                         //const jsessionId = document.cookie.match(/JSESSIONID=([^;]+)/); // Get the JSESSIONID cookie value from the current tab
-
-                        const request1 = new Request(apiUrlVenue, {
-                          method: "GET",
-                          headers: myHeaders,
-                          credentials: 'include'
-                        });
-                        console.log(request1);
-
-                        //fetch(request).then(resp => console.log(resp))
-                        fetch(request1)
-                        .then(response => response.json())
-                        .then(data => {
-                          console.log(data); // Process the response data as needed
-                          // Parse id and apPassword from the response
- 
-                          const venuesArray=data
-                          for (var i = 0; i < venuesArray.length; i++) {
-                              var element1=venuesArray[i];
-                              var api1VenueId=element1.id
-                              var api1VenueName=element1.name
-                              //console.log("id: " + api1VenueId + ", Venue name: " + api1VenueName);
-                              var group1 = {id: api1VenueId, name: api1VenueName};
-                              venueGroups.push(group1);
-                          }
-                          //if (venueGroups.length > 0) {
-                          //    console.log('venueGroups: ' + venueGroups[0]);
-                          //} else {
-                          //    console.log('venueGroups is empty');
-                          //}
-                        })
-                        .catch(error => {
-                          console.log(error);
-                        });
                         
                         const addVenueName = document.getElementById("addVenueName").value;
                         const messageElement = document.getElementById("addVenueResult");
@@ -470,7 +437,6 @@
                           //console.log(data); // Process the response data as needed
                           // Parse id and apPassword from the response   
                           if (response.status === 202) {
-                            console.log('202');
                             response.json().then(responseData => {
                               if (responseData.requestId.length > 0) {
                                 const successMessage = "Success"
@@ -481,7 +447,6 @@
                               }
                             });
                           } else if (response.status === 400 || response.status === 403) {
-                            console.log('40X');
                             response.json().then(responseData => {
                               if (responseData.errors && responseData.errors.length > 0) {
                                 const errorMessage = responseData.errors[0].message;
@@ -514,7 +479,132 @@
                 }
             }
         )
-    })
+      })
+
+      queryApDrsBtn?.addEventListener('click', async () => {
+        const ApSerial = document.getElementById("queryApSerial").value;
+        const nonProdUrl = 'https://aprqa.ruckuswireless.com/api/v4/accesspoints/' + ApSerial;
+        const ProdUrl = 'https://ap-registrar.ruckuswireless.com/api/v4/accesspoints/' + ApSerial
+        
+        const NonProdApElement = document.getElementById("NonProdApEnv");
+        const NonProdApEnvElement = document.getElementById("QueryNonProdApEnv");
+        const NonProdApTenantElement = document.getElementById("QueryNonProdApTenant");
+        const ProdApElement = document.getElementById("ProdApEnv");
+        const ProdApEnvElement = document.getElementById("QueryProdApEnv");
+        const ProdApTenantElement = document.getElementById("QueryProdApTenant");
+
+        function displayNonProdMessage(color, env, tenant) {
+          NonProdApElement.textContent = 'Non Prod Env (dev / qa) Query:'
+          NonProdApEnvElement.textContent = env;
+          NonProdApTenantElement.textContent = tenant;
+          NonProdApEnvElement.style.color = color;
+          NonProdApTenantElement.style.color = color;
+        }
+
+        function displayProdMessage(color, env, tenant) {
+          ProdApElement.textContent = 'Prod Env (stage / prod) Query:'
+          ProdApEnvElement.textContent = env;
+          ProdApTenantElement.textContent = tenant;
+          ProdApEnvElement.style.color = color;
+          ProdApTenantElement.style.color = color;
+        }
+
+        const myHeaders = new Headers();
+        myHeaders.append("Content-Type", 'application/json');
+        myHeaders.append("Access-Control-Allow-Origin", '*');
+        //const jsessionId = document.cookie.match(/JSESSIONID=([^;]+)/); // Get the JSESSIONID cookie value from the current tab
+
+        const nonProdRequest = new Request(nonProdUrl, {
+          method: "GET",
+          headers: myHeaders,
+          credentials: 'include'
+        });
+        console.log(nonProdRequest);
+
+        //fetch(request).then(resp => console.log(resp))
+        fetch(nonProdRequest)
+        .then(response => {
+          if (response.status === 200) {
+            response.json().then(responseData => {
+              if (responseData.tenant && responseData.tenant.length > 0) {
+                const getNonProdEnv = 'Found AP in Env: ' + responseData.controller_address;
+                const getNonProdTenant =  'Tenant ID: ' + responseData.tenant;
+                displayNonProdMessage("green", getNonProdEnv, getNonProdTenant);
+              } else {
+                const getNonProdEnv = "Got 200 status code but no data";
+                displayNonProdMessage("black", getNonProdEnv);
+              }
+            });
+          } else if (response.status === 404 || response.status === 401) {
+            response.json().then(responseData => {
+              if (responseData.error && responseData.error.length > 0) {
+                const getNonProdEnv = "Not found AP";
+                const getNonProdTenant  = 'Response: ' + responseData.error;
+                displayNonProdMessage("red", getNonProdEnv, getNonProdTenant)
+              } else {
+                const getNonProdEnv = "Got 40X status code but no data"
+                displayNonProdMessage("orange", getNonProdEnv);
+              }
+            }).catch(error => {
+              console.error("Error parsing response JSON:", error);
+              const getNonProdEnv = "Unknown Error"
+              displayNonProdMessage("orange", getNonProdEnv);
+            });
+          } else {
+            const getNonProdEnv = "Unknown Error"
+            displayNonProdMessage("orange", getNonProdEnv);
+          }             
+        })
+        .catch(error => {
+          console.log(error);
+        });
+
+        const ProdRequest = new Request(ProdUrl, {
+          method: "GET",
+          headers: myHeaders,
+          credentials: 'include'
+        });
+        console.log(ProdRequest);
+
+        //fetch(request).then(resp => console.log(resp))
+        fetch(ProdRequest)
+        .then(response => {
+          if (response.status === 200) {
+            response.json().then(responseData => {
+              if (responseData.tenant && responseData.tenant.length > 0) {
+                const getProdEnv = 'Found AP in Env: ' + responseData.controller_address;
+                const getProdTenant =  'Tenant ID: ' + responseData.tenant;
+                displayProdMessage("green", getProdEnv, getProdTenant);
+              } else {
+                const getProdEnv = "Got 200 status code but no data";
+                displayProdMessage("black", getProdEnv);
+              }
+            });
+          } else if (response.status === 404 || response.status === 401) {
+            response.json().then(responseData => {
+              if (responseData.error && responseData.error.length > 0) {
+                const getProdEnv = "Not found AP";
+                const getProdTenant  = 'Response: ' + responseData.error;
+                displayProdMessage("red", getProdEnv, getProdTenant)
+              } else {
+                const getProdEnv = "Got 40X status code but no data"
+                displayProdMessage("orange", getProdEnv);
+              }
+            }).catch(error => {
+              console.error("Error parsing response JSON:", error);
+              const getProdEnv = "Unknown Error"
+              displayProdMessage("orange", getProdEnv);
+            });
+          } else {
+            const getProdEnv = "Unknown Error"
+            displayProdMessage("orange", getProdEnv);
+          }             
+        })
+        .catch(error => {
+          console.log(error);
+        });
+
+      })
 
       /*
       <-----------Event Listeners End------------------------------------------------------>

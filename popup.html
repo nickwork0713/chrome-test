@@ -5,8 +5,8 @@
   </head>
   <body>
     <header class="extenstionTitleCont">
-      <img class="extensionLogo" width="48px" height="48px" src="./images/ruckus-r1_48.png" alt="logo">
-      <h2 class="extensionTitle">Ruckus Cloud Chrome Tool</h2>
+      <img class="extensionLogo" width="127px" height="48px" src="images/ruckus_logo_white-orange.png" alt="logo">
+      <h2 class="extensionTitle">Ruckus Cloud Tool</h2>
     </header>
     <main>
       <div class="menu">
@@ -34,30 +34,34 @@
         </table>
       </div>
       <div class="content" id="tab2-content">
-        <h2>To add a venue</h2>
+        <h2>To add a venue located in Taiwan.</h2>
         <div id="buttonContainer">
           <div>  </div>
           <button id="addVenue" type="button" >Add Venue</button>
         </div>
         <p></p>
-        <label for="addVenueName">Venue Name:</label>
-        <input type="text" id="addVenueName" value="Venue01-TW">
+        <label for="addVenueName" class="labelForText">Venue Name:</label>
+        <input type="text" id="addVenueName" maxlength="32" value="Venue01-TW">
         <p></p>
-        <p id="addVenueResult"></p>
-        <p id="addVenueRequestId"></p>
+        <p id="addVenueResult" class="result-level-1"></p>
+        <p id="addVenueRequestId" class="result-level-1"></p>
       </div>
       <div class="content" id="tab3-content">
-        <h2>Query tools</h2>
+        <h2>Query AP serial number in APR/DRS server</h2>
         <div id="buttonContainer">
           <div>  </div>
           <button id="queryApDrs" type="button" >Query AP</button>
         </div>
         <p></p>
-        <label for="AP Serial Number">Venue Name:</label>
-        <input type="text" id="queryAPserial" value="">
+        <label for="AP Serial Number" class="labelForText">AP Serial Number:</label>
+        <input type="text" id="queryApSerial" maxlength="12" value="">
         <p></p>
-        <p id="QueryApEnv"></p>
-        <p id="QueryApTenant"></p>
+        <p id="NonProdApEnv" class="result-level-1"></p>
+        <p id="QueryNonProdApEnv" class="result-level-2"></p>
+        <p id="QueryNonProdApTenant" class="result-level-2"></p>
+        <p id="ProdApEnv" class="result-level-1"></p>
+        <p id="QueryProdApEnv" class="result-level-2"></p>
+        <p id="QueryProdApTenant" class="result-level-2"></p>
       </div>
         
     </main>

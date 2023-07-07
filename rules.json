@@ -1,82 +1,98 @@
 [
-    {
-      "id": 1,
-      "priority": 1,
-      "condition": {
-        "requestDomains": ["dev.ruckus.cloud"],
-        "requestMethods": ["post"]
-      },
-      "action": {
-        "type": "modifyHeaders",
-        "requestHeaders": [{
-          "header": "Origin",
-          "operation": "set",
-          "value": "https://dev.ruckus.cloud"
-        }]
-      }
+  {
+    "id": 1,
+    "priority": 1,
+    "condition": {
+      "urlFilter": "|https://dev.ruckus.cloud/api/tenant/*/venue",
+      "requestMethods": ["post"]
     },
-    {
-        "id": 2,
-        "priority": 1,
-        "condition": {
-          "requestDomains": ["qa.ruckus.cloud"],
-          "requestMethods": ["post"]
-        },
-        "action": {
-          "type": "modifyHeaders",
-          "requestHeaders": [{
-            "header": "Origin",
-            "operation": "set",
-            "value": "https://qa.ruckus.cloud"
-          }]
-        }
-    },
-    {
-        "id": 3,
-        "priority": 1,
-        "condition": {
-          "requestDomains": ["ruckus.cloud"],
-          "requestMethods": ["post"]
-        },
-        "action": {
-          "type": "modifyHeaders",
-          "requestHeaders": [{
-            "header": "Origin",
-            "operation": "set",
-            "value": "https://ruckus.cloud"
-          }]
-        }
-    },
-    {
-        "id": 4,
-        "priority": 1,
-        "condition": {
-          "requestDomains": ["asia.ruckus.cloud"],
-          "requestMethods": ["post"]
-        },
-        "action": {
-          "type": "modifyHeaders",
-          "requestHeaders": [{
-            "header": "Origin",
-            "operation": "set",
-            "value": "https://asia.ruckus.cloud"
-          }]
-        }
-    },
-    {
-        "id": 5,
-        "priority": 1,
-        "condition": {
-          "requestDomains": ["eu.ruckus.cloud"],
-          "requestMethods": ["post"]
-        },
-        "action": {
-          "type": "modifyHeaders",
-          "requestHeaders": [{
-            "header": "Origin",
-            "operation": "set",
-            "value": "https://eu.ruckus.cloud"
-          }]
-        }
+    "action": {
+      "type": "modifyHeaders",
+      "requestHeaders": [{
+        "header": "Origin",
+       "operation": "set",
+       "value": "https://dev.ruckus.cloud"
+      }]
     }
-  ]
+  },
+  {
+    "id": 2,
+    "priority": 1,
+    "condition": {
+      "urlFilter": "|https://qa.ruckus.cloud/api/tenant/*/venue",
+      "requestMethods": ["post"]
+    },
+    "action": {
+      "type": "modifyHeaders",
+      "requestHeaders": [{
+        "header": "Origin",
+        "operation": "set",
+        "value": "https://qa.ruckus.cloud"
+      }]
+    }
+  },
+  {
+    "id": 3,
+    "priority": 1,
+    "condition": {
+      "urlFilter": "|https://stage.ruckus.cloud/api/tenant/*/venue",
+      "requestMethods": ["post"]
+    },
+    "action": {
+      "type": "modifyHeaders",
+      "requestHeaders": [{
+        "header": "Origin",
+       "operation": "set",
+       "value": "https://stage.ruckus.cloud"
+      }]
+    }
+  },
+  {
+    "id": 4,
+    "priority": 1,
+    "condition": {
+      "urlFilter": "|https://ruckus.cloud/api/tenant/*/venue",
+      "requestMethods": ["post"]
+    },
+    "action": {
+      "type": "modifyHeaders",
+      "requestHeaders": [{
+        "header": "Origin",
+        "operation": "set",
+        "value": "https://ruckus.cloud"
+      }]
+    }
+  },
+  {
+    "id": 5,
+    "priority": 1,
+    "condition": {
+      "urlFilter": "|https://asia.ruckus.cloud/api/tenant/*/venue",
+      "requestMethods": ["post"]
+    },
+    "action": {
+      "type": "modifyHeaders",
+      "requestHeaders": [{
+        "header": "Origin",
+       "operation": "set",
+       "value": "https://asia.ruckus.cloud"
+      }]
+    }
+  },
+  {
+    "id": 6,
+    "priority": 1,
+    "condition": {
+      "urlFilter": "|https://eu.ruckus.cloud/api/tenant/*/venue",
+      "requestMethods": ["post"]
+    },
+    "action": {
+      "type": "modifyHeaders",
+      "requestHeaders": [{
+        "header": "Origin",
+        "operation": "set",
+        "value": "https://eu.ruckus.cloud"
+      }]
+    }
+  }
+]

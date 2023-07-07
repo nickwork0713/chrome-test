@@ -11,8 +11,8 @@ body {
 
 .extenstionTitleCont {
     width: 100%;
-    background-color: white;
-    color: black;
+    background-color: #333333;
+    color: white;
     padding: 2px 4px;
     display: flex;
     justify-content: center;
@@ -43,13 +43,16 @@ body {
     margin-top: 10px;
 }
 
+h2 {
+    text-indent: 10px;
+}
 
 button {
     width: 150px;
     height: 30px;
     border-radius: 4px;
     color: white;
-    background-color: gray;
+    background-color: #333333;
 }
 
 button:hover {
@@ -90,15 +93,17 @@ label {
     display: block;
     margin-bottom: 5px;
     font-weight: bold;
-  }
+}
 
-  input[type="text"] {
-    width: 80%;
+input[type="text"] {
+    margin-left: 10px;
+    text-indent: 1em;
+    width: 40%;
     padding: 5px;
     border: 1px solid #ccc;
     border-radius: 3px;
     margin-bottom: 10px;
-  }
+}
 
 a {
     text-decoration: none;
@@ -134,5 +139,23 @@ a:hover {
     background-color: #f2f2f2;
   }
 
+.labelForText {
+    text-indent: 10px;
+    font-size: 18px;
+    text-align: left;
+    font-weight: bold;
+}
+
+.result-level-1 {
+    text-indent: 10px;
+    font-size: 20px;
+    text-align: left;
+    font-weight: bold;
+}
+
+.result-level-2 {
+    text-indent: 10px;
+    font-size: 18px;
+}
   
 
