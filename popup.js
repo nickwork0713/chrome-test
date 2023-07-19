@@ -16,8 +16,10 @@
       const local = 'local'
 
       const getApPassBtn = document.querySelector('#getAPpass')
+      const getEdgePassBtn = document.querySelector('#getEdgepass')
       const addVenueBtn = document.querySelector('#addVenue')
       const queryApDrsBtn = document.querySelector('#queryApDrs')
+      const querySwitchDrsBtn = document.querySelector('#querySwitchDrs')
 
       /*
       <-----------Util Functions Start------------------------------------------------------>
@@ -247,6 +249,7 @@
                                 //var matchVenueName = getVenueNameById(api2VenueId);
                                 //console.log('Name: ' + matchVenueName + ' ,AP Password: ' + api2ApPassword + ' ,id: ' + api2VenueId)
                             }
+
                             // Get the container element
                             var groupContainer = document.getElementById('groupContainer');
                             groupContainer.innerHTML = '';
@@ -263,13 +266,19 @@
                                 return 0;
                             });
 
+                            const venueGroupsReMap = venueGroups.map(item => ({
+                              name: item.name,
+                              password: item.password,
+                              id: item.id,
+                            }));
+
                             var table = document.querySelector('#groupTable');
                             var headerRow = document.querySelector('#headerRow');
 
                             // Clear any existing content in the header row
                             headerRow.innerHTML = '';
                             // Get the keys of the first group object
-                            var groupKeys = Object.keys(venueGroups[0]);
+                            var groupKeys = Object.keys(venueGroupsReMap[0]);
 
                             // Iterate over the keys and create table header cells
                             for (var i = 0; i < groupKeys.length; i++) {
@@ -292,8 +301,8 @@
                             tableBody.innerHTML = '';
 
                             // Iterate over the groups array
-                            for (var i = 0; i < venueGroups.length; i++) {
-                                var group = venueGroups[i];
+                            for (var i = 0; i < venueGroupsReMap.length; i++) {
+                                var group = venueGroupsReMap[i];
                                 /*
                                 // Create a new paragraph element to display user and pass
                                 var paragraph = document.createElement('p');
@@ -343,6 +352,293 @@
               }
           )
       })
+
+      getEdgePassBtn?.addEventListener('click', async () => {
+        const activeTab = await getActiveTabURL()
+        const tabUrlAll = activeTab.url
+        const tabUrlParts = tabUrlAll.replace(/^(https?:\/\/)?/, "").split("/");
+        const testenv = tabUrlParts[0]
+        //var edgeSerial = '962494D6C11F9611EE8EC5000C29708ADF'
+        var venueGroups=[]; 
+        var testTenantId = tabUrlParts[1] // Pver R1
+        if (testTenantId === 'api') {
+          //The UI is in pver ACX.
+          testTenantId = tabUrlParts[4] // Pver ACX
+        }
+        console.log('tenant id: ' + testTenantId);
+        const tabId = activeTab?.id
+        await clearExtensionStorage(session)
+        chrome.scripting.executeScript(
+            {
+                target: { tabId: tabId },
+                func: getDomainStorageData,
+                args: [session], // passing typeOfStorage to getDomainStorageData func
+            },
+            (injectionResults) => {
+                try {
+                    console.log(
+                        'injectionResults of getApPassBtn.addEventListener',
+                        injectionResults[0]?.result?.length ?? 0
+                    )
+                    for (const frameResult of injectionResults) {
+                        const result = frameResult?.result || []
+                        console.log(result[1].jwt);
+                        console.log('===');
+                        console.log(JSON.stringify(result));
+                        chrome.storage.local.set({
+                            session: result,
+                        });
+                        // Retrieve the JWT key from the session storage
+                        const jwtString = JSON.stringify(result[1].jwt).slice(1, -1); // Convert the JWT value to a JSON string
+                        // const jwtString = JSON.stringify(result.jwt);
+                        // Display the JWT key in the feedBackForSessionStorage element
+                        const apiUrlEdge = 'https://' + testenv + '/api/' + 'edges';
+                        //const apiUrlEdgePass = 'https://' + testenv + '/api/edges/' + edgeSerial + '/passwordDetails';
+                        const myHeaders = new Headers();
+                        const jwtToken = `Bearer ${jwtString}` 
+                        myHeaders.append("Authorization", jwtToken);
+                        myHeaders.append("Content-Type", 'application/json');
+                        myHeaders.append("Access-Control-Allow-Origin", '*');
+                        //const jsessionId = document.cookie.match(/JSESSIONID=([^;]+)/); // Get the JSESSIONID cookie value from the current tab
+                        
+                        const request1 = new Request(apiUrlEdge, {
+                          method: "GET",
+                          headers: myHeaders,
+                          credentials: 'include'
+                        });
+                        console.log(request1);
+
+                        function getEdgeList(request){
+                          //fetch(request).then(resp => console.log(resp))
+                          fetch(request)
+                          .then(response => response.json())
+                          .then(data => {
+                            console.log(data); // Process the response data as needed
+                            // Parse id and apPassword from the response
+ 
+                            const edgesArray=data
+                            for (var i = 0; i < edgesArray.length; i++) {
+                              var element1=edgesArray[i];
+                              var api1EdgeSerial=element1.serialNumber
+                              var api1EdgeName=element1.name
+                              var group1 = {serial: api1EdgeSerial, name: api1EdgeName};
+                              venueGroups.push(group1);
+                            }
+                          })
+                          .catch(error => {
+                          console.log(error);
+                          });
+                        }
+
+                        function getVenueNameById(id) {
+                          // Iterate over the groups array
+                          for (var i = 0; i < venueGroups.length; i++) {
+                          var group = venueGroups[i];
+                          // Check if the group's id matches the given id
+                          if (group.id === id) {
+                          // Return the user associated with the matching id
+                          return group.name;
+                          }
+                          }
+                          // If no matching id is found, return null or handle the case as needed
+                          return null;
+                        }
+
+                        function AppendEdgePasswordBySerial(serial, loginPass, enablePass) {
+                          // Iterate over the groups array
+                          for (var i = 0; i < venueGroups.length; i++) {
+                            var group = venueGroups[i];
+                            // Check if the group's id matches the given id
+                            if (group.serial === serial) {
+                            // Return the user associated with the matching id
+                              group.loginPassword = loginPass
+                              group.enablePassword = enablePass
+                            }
+                          }
+                          // If no matching id is found, return null or handle the case as needed
+                          return null;
+                        }
+
+                        //function QueryEachEdgePass(serial) {
+                        //  for (var i = 0; i <venueGroups.length; i++) {
+
+                        //  }
+                        //}
+
+                        //for (var i = 0; i <venueGroups.length; i++) {
+                        //  var edgeSerial = venueGroups[i].serial;
+                        //  const reqEachEdgePass = new Request(apiUrlEdgePass, {
+                        //    method: "GET",
+                        //    headers: myHeaders,
+                        //    credentials: 'include'
+                        //  });
+                        //  console.log(reqEachEdgePass);
+                          //fetch(request2)
+                          //.then(response => response.json())
+                          //.then(data => {
+                          //  console.log(data);
+                          //})
+
+                          //var api2EdgeSerial=edgeSerial
+                          //var api2loginPass=data.loginPassword
+                          //var api2enablePass=data.enablePassword
+                          //AppendEdgePasswordBySerial(api2EdgeSerial, api2loginPass, api2enablePass);
+
+                        //}
+                        
+                        
+                        function getEdgePwd(url, edgeSerial){
+                          const request2 = new Request(url, {
+                            method: "GET",
+                            headers: myHeaders,
+                            credentials: 'include'
+                          })
+                          console.log(request2);
+                          fetch(request2)
+                          .then(response => response.json())
+                          .then(data => {
+                            console.log(data); // Process the response data as needed
+                          
+                            // Parse serial and Edge loginPassword&enablePassword from the response
+                            //const edgePass=data.passwordDetail
+                            //for (var i = 0; i < venueGroups.length; i++) {
+                            //var element2 = edgePassArray[i];
+                            var api2EdgeSerial=edgeSerial
+                            var api2loginPass=data.loginPassword
+                            var api2enablePass=data.enablePassword
+                            AppendEdgePasswordBySerial(api2EdgeSerial, api2loginPass, api2enablePass);
+                            //console.log("id: " + api2VenueId + ", AP Pass: " + api2ApPassword);
+                            //var matchVenueName = getVenueNameById(api2VenueId);
+                            console.log('777:' + venueGroups)
+                            console.log('test')
+                            //}
+                          })
+                          .catch(error => {
+                            console.log(error);
+                          });
+                        }
+
+                        async function main() {
+                          try {
+                            await getEdgeList(request1);
+                            await new Promise(resolve => setTimeout(resolve, 1000));
+                            for (var i = 0; i < venueGroups.length; i++) {
+                                var group = venueGroups[i];
+                                const testEdgeSerial = group.serial
+                                console.log(testEdgeSerial)
+                                // Check if the group's id matches the given id
+                                const apiUrlEdgeTest = 'https://' + testenv + '/api/edges/' + testEdgeSerial + '/passwordDetails';
+                                // Return the user associated with the matching id
+                                await getEdgePwd(apiUrlEdgeTest, testEdgeSerial);
+                            }
+                          
+                            //await getEdgePwd(apiUrlEdgePass);
+
+                            console.log('Both API requests completed successfully');
+                            await new Promise(resolve => setTimeout(resolve, 1000));
+                            // Get the container element
+                            var groupContainer = document.getElementById('groupContainer');
+                            groupContainer.innerHTML = '';
+
+                            venueGroups.sort(function(a, b) {
+                              var nameA = a.name.toUpperCase();
+                              var nameB = b.name.toUpperCase();
+                              if (nameA < nameB) {
+                                return -1;
+                              }
+                              if (nameA > nameB) {
+                                return 1;
+                              }
+                              return 0;
+                            });
+
+                            const edgeGroups = venueGroups.map(item => ({
+                              name: item.name,
+                              loginPassword: item.loginPassword,
+                              enablePassword: item.enablePassword,
+                              serial: item.serial,
+                            }));
+
+                            var table = document.querySelector('#groupTable');
+                            var headerRow = document.querySelector('#headerRow');
+                            // Clear any existing content in the header row
+                            headerRow.innerHTML = '';
+                            // Get the keys of the first group object
+                            var EdgeGroupKeys = Object.keys(edgeGroups[0]);
+
+                            // Iterate over the keys and create table header cells
+                            for (var i = 0; i < EdgeGroupKeys.length; i++) {
+                                var key = EdgeGroupKeys[i];
+
+                                // Create a new table header cell
+                                var headerCell = document.createElement('th');
+
+                                // Set the content of the header cell as the key
+                                headerCell.textContent = key;
+
+                                // Append the header cell to the header row
+                                headerRow.appendChild(headerCell);
+                            }
+
+                            // Get the table body element
+                            var tableBody = table.querySelector('tbody');
+
+                            // Clear any existing rows in the table body
+                            tableBody.innerHTML = '';
+
+                            // Iterate over the groups array
+                            for (var i = 0; i < edgeGroups.length; i++) {
+                                var group = edgeGroups[i];
+                            /*
+                            // Create a new paragraph element to display user and pass
+                            var paragraph = document.createElement('p');
+
+                            // Set the content of the paragraph using user and pass values
+                            paragraph.textContent = 'Venue: ' + group.name + ' , AP Password: ' + group.password + ' , id: ' + group.id;
+
+                             // Append the paragraph to the container element
+                            groupContainer.appendChild(paragraph);
+                            */
+                            //for table data
+                            // Create a new row element
+                                var row = document.createElement('tr');
+
+                            // Iterate over the keys and create table cells for each key
+                                for (var j = 0; j < EdgeGroupKeys.length; j++) {
+                                    var key = EdgeGroupKeys[j];
+
+                                // Create a new table cell
+                                    var cell = document.createElement('td');
+
+                                // Set the content of the cell using the corresponding value from the group object
+                                    cell.textContent = group[key];
+
+                                // Append the cell to the row
+                                    row.appendChild(cell);
+                                }
+
+                             // Append the row to the table body
+                                tableBody.appendChild(row);
+                            }
+                        //feedBackForSessionStorage.innerHTML = `JWT Key: ${jwtString}` ;
+                        //feedBackForSessionStorage.innerHTML =
+                        //    'All the session storage values are retrieved123.'
+                          } catch (error) {
+                            console.log ('An error occurred:', error);
+                          }
+                        }
+                        main();
+                    }
+                } catch (err) {
+                    console.error(
+                        'Error occured in injectionResults of getApPassBtn.addEventListener',
+                        err
+                    )
+                }
+            }
+        )
+      }
+      )
 
       addVenueBtn?.addEventListener('click', async () => {
         const activeTab = await getActiveTabURL()
@@ -482,9 +778,9 @@
       })
 
       queryApDrsBtn?.addEventListener('click', async () => {
-        const ApSerial = document.getElementById("queryApSerial").value;
-        const nonProdUrl = 'https://aprqa.ruckuswireless.com/api/v4/accesspoints/' + ApSerial;
-        const ProdUrl = 'https://ap-registrar.ruckuswireless.com/api/v4/accesspoints/' + ApSerial
+        const Serial = document.getElementById("querySerial").value;
+        const nonProdUrl = 'https://aprqa.ruckuswireless.com/api/v4/accesspoints/' + Serial;
+        const ProdUrl = 'https://ap-registrar.ruckuswireless.com/api/v4/accesspoints/' + Serial
         
         const NonProdApElement = document.getElementById("NonProdApEnv");
         const NonProdApEnvElement = document.getElementById("QueryNonProdApEnv");
@@ -605,6 +901,132 @@
         });
 
       })
+
+      querySwitchDrsBtn?.addEventListener('click', async () => {
+        const Serial = document.getElementById("querySerial").value;
+        const nonProdUrl = 'https://aprqa.ruckuswireless.com/api/v4/switches/' + Serial;
+        const ProdUrl = 'https://ap-registrar.ruckuswireless.com/api/v4/switches/' + Serial
+        
+        const NonProdApElement = document.getElementById("NonProdApEnv");
+        const NonProdApEnvElement = document.getElementById("QueryNonProdApEnv");
+        const NonProdApTenantElement = document.getElementById("QueryNonProdApTenant");
+        const ProdApElement = document.getElementById("ProdApEnv");
+        const ProdApEnvElement = document.getElementById("QueryProdApEnv");
+        const ProdApTenantElement = document.getElementById("QueryProdApTenant");
+
+        function displayNonProdMessage(color, env, tenant) {
+          NonProdApElement.textContent = 'Non Prod Env (dev / qa) Query:'
+          NonProdApEnvElement.textContent = env;
+          NonProdApTenantElement.textContent = tenant;
+          NonProdApEnvElement.style.color = color;
+          NonProdApTenantElement.style.color = color;
+        }
+
+        function displayProdMessage(color, env, tenant) {
+          ProdApElement.textContent = 'Prod Env (stage / prod) Query:'
+          ProdApEnvElement.textContent = env;
+          ProdApTenantElement.textContent = tenant;
+          ProdApEnvElement.style.color = color;
+          ProdApTenantElement.style.color = color;
+        }
+
+        const myHeaders = new Headers();
+        myHeaders.append("Content-Type", 'application/json');
+        myHeaders.append("Access-Control-Allow-Origin", '*');
+        //const jsessionId = document.cookie.match(/JSESSIONID=([^;]+)/); // Get the JSESSIONID cookie value from the current tab
+
+        const nonProdRequest = new Request(nonProdUrl, {
+          method: "GET",
+          headers: myHeaders,
+          credentials: 'include'
+        });
+        console.log(nonProdRequest);
+
+        //fetch(request).then(resp => console.log(resp))
+        fetch(nonProdRequest)
+        .then(response => {
+          if (response.status === 200) {
+            response.json().then(responseData => {
+              if (responseData.tenant && responseData.tenant.length > 0) {
+                const getNonProdEnv = 'Found Switch in Env: ' + responseData.controller_address;
+                const getNonProdTenant =  'Tenant ID: ' + responseData.tenant;
+                displayNonProdMessage("green", getNonProdEnv, getNonProdTenant);
+              } else {
+                const getNonProdEnv = "Got 200 status code but no data";
+                displayNonProdMessage("black", getNonProdEnv);
+              }
+            });
+          } else if (response.status === 404 || response.status === 401) {
+            response.json().then(responseData => {
+              if (responseData.error && responseData.error.length > 0) {
+                const getNonProdEnv = "Not found Switch, has data";
+                const getNonProdTenant  = 'Response: ' + responseData.error;
+                displayNonProdMessage("red", getNonProdEnv, getNonProdTenant)
+              } else {
+                const getNonProdEnv = "Got 40X status code but no data"
+                displayNonProdMessage("orange", getNonProdEnv);
+              }
+            }).catch(error => {
+              console.error("Error parsing response JSON:", error);
+              const getNonProdEnv = "Not found Switch"
+              displayNonProdMessage("orange", getNonProdEnv);
+            });
+          } else {
+            const getNonProdEnv = "Not found Switch"
+            displayNonProdMessage("orange", getNonProdEnv);
+          }             
+        })
+        .catch(error => {
+          console.log(error);
+        });
+
+        const ProdRequest = new Request(ProdUrl, {
+          method: "GET",
+          headers: myHeaders,
+          credentials: 'include'
+        });
+        console.log(ProdRequest);
+
+        //fetch(request).then(resp => console.log(resp))
+        fetch(ProdRequest)
+        .then(response => {
+          if (response.status === 200) {
+            response.json().then(responseData => {
+              if (responseData.tenant && responseData.tenant.length > 0) {
+                const getProdEnv = 'Found Switch in Env: ' + responseData.controller_address;
+                const getProdTenant =  'Tenant ID: ' + responseData.tenant;
+                displayProdMessage("green", getProdEnv, getProdTenant);
+              } else {
+                const getProdEnv = "Got 200 status code but no data";
+                displayProdMessage("black", getProdEnv);
+              }
+            });
+          } else if (response.status === 404 || response.status === 401) {
+            response.json().then(responseData => {
+              if (responseData.error && responseData.error.length > 0) {
+                const getProdEnv = "Not found Switch, has data";
+                const getProdTenant  = 'Response: ' + responseData.error;
+                displayProdMessage("red", getProdEnv, getProdTenant)
+              } else {
+                const getProdEnv = "Got 40X status code but no data"
+                displayProdMessage("orange", getProdEnv);
+              }
+            }).catch(error => {
+              console.error("Error parsing response JSON:", error);
+              const getProdEnv = "Not found Switch"
+              displayProdMessage("orange", getProdEnv);
+            });
+          } else {
+            const getProdEnv = "Unknown Error"
+            displayProdMessage("orange", getProdEnv);
+          }             
+        })
+        .catch(error => {
+          console.log(error);
+        });
+
+      })
+
 
       /*
       <-----------Event Listeners End------------------------------------------------------>

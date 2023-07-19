@@ -3,7 +3,8 @@
 }
 
 body {
-    width: 780px;
+    width: 900px;
+    max-width: 900px;
     margin: 0;
     overflow-x: auto;
     overflow-y: auto;
@@ -51,6 +52,8 @@ button {
     width: 150px;
     height: 30px;
     border-radius: 4px;
+    display: inline-block;
+    margin-right: 10px;
     color: white;
     background-color: #333333;
 }
