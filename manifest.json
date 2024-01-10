@@ -11,7 +11,7 @@
     "96": "./images/ruckus-r1_96.png",
     "128": "./images/ruckus-r1_128.png"
   },
-  "permissions": [ "scripting", "activeTab", "storage", "tabs", "declarativeNetRequest", "declarativeNetRequestFeedback", "https://*/*" ],
+  "permissions": [ "scripting", "activeTab", "storage", "tabs", "declarativeNetRequest", "declarativeNetRequestFeedback" ],
   "host_permissions": [
     "https://*/*"
   ],
